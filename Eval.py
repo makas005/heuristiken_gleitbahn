@@ -9,7 +9,7 @@ class Eval:
         h = self.__init_h
         l = self.__seg_length
         v_curr = 0
-        for i in range(node_arr):
+        for i in range(len(node_arr)):
             s = Segment(h-node_arr[i], l, v_curr)
             h = node_arr[i]
             t_seg = s.CalcT()
