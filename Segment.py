@@ -17,7 +17,7 @@ class Segment:
             t = s/self.__v_initial
         else:
             t = (-2*self.__v_initial+math.sqrt(4*self.__v_initial**2+4*a*s))/(2*a)
-        v_end = 0.5*a*(t**2)+self.__v_initial
+        v_end = a*t+self.__v_initial
         return v_end
 
     def CalcT(self):
