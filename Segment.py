@@ -16,7 +16,7 @@ class Segment:
         if a==0:
             t = s/self.__v_initial
         else:
-            t = (-self.__v_initial+math.sqrt(self.__v_initial**2+2*a*s))/a
+            t = -(self.__v_initial/a)+math.sqrt((self.__v_initial/a)**2+2*(s/a))
         v_end = 0.5*a*(t**2)+self.__v_initial
         return v_end
 
@@ -29,7 +29,7 @@ class Segment:
             else:
                 t = s/self.__v_initial   
         else:
-            t = (-self.__v_initial+math.sqrt(self.__v_initial**2+2*a*s))/a
+            t = -(self.__v_initial/a)+math.sqrt((self.__v_initial/a)**2+2*(s/a))
         return t
     
     def GetDeltaH(self):
