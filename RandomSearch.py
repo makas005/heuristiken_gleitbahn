@@ -16,7 +16,6 @@ class RandomSearch:
 		for t in range(self.__num_tries):
 			for d in range(self.__dimension):
 				current_guesses[d] = random.uniform(self.__lower_bound, self.__upper_bound)
-
 			current_eval_value = self.__eval_function(current_guesses)
 			if current_eval_value == -1:
 				#error case

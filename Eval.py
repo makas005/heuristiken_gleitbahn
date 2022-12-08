@@ -1,10 +1,11 @@
 from Segment import Segment
-class Eval:
+class Eval: 
     def __init__(self, init_h, seg_length):
         self.__init_h = init_h
         self.__seg_length = seg_length
 
     def eval_func(self, node_arr):
+        node_arr.append(0)
         t = 0
         h = self.__init_h
         l = self.__seg_length
@@ -18,7 +19,9 @@ class Eval:
                 t += t_seg
             else:
                 break
+        node_arr.pop()
         if(t_seg==-1):
             return -1
         else:
+            print(t)
             return t
