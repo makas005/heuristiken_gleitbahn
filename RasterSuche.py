@@ -3,13 +3,32 @@ class RasterSuche():
         self.__dimension = dimension
         self.__lower_bound = lower_bound
         self.__upper_bound = upper_bound
-        self.__grid_size = 3
+        self.__grid_size = 10
         self.__eval_function = eval_function
         self.__grid_values = self.__linspace_grid()
 
     def Optimize(self):
         matrix = self.__create_grid_matrix()
-        return matrix
+        print(f"Matrix has dimensions {len(matrix)}x{len(matrix[0])}")
+        
+        optimal_eval_value = -1
+        optimal_guesses = [None] * self.__dimension
+
+        for row in matrix:
+            current_eval_value = self.__eval_function(row)
+            if current_eval_value == -1:
+                #error case
+                continue
+            if optimal_eval_value == -1:
+                #first run of loop
+                optimal_eval_value = current_eval_value
+                optimal_guesses = row.copy()
+            elif current_eval_value < optimal_eval_value:
+                #better node heights found
+                optimal_eval_value = current_eval_value
+                optimal_guesses = row.copy()
+            
+        return optimal_guesses
 
     def __create_initial_grid_matrix(self):
         grid_matrix = []

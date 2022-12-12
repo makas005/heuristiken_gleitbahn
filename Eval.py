@@ -23,5 +23,4 @@ class Eval:
         if(t_seg==-1):
             return -1
         else:
-            print(t)
             return t
