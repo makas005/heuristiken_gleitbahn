@@ -1,4 +1,3 @@
-from Segment import Segment
 class Eval: 
     def __init__(self, init_h, seg_length):
         self.__init_h = init_h
@@ -23,5 +22,4 @@ class Eval:
         if(t_seg==-1):
             return -1
         else:
-            print(t)
             return t
