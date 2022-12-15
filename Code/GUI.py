@@ -3,6 +3,8 @@ import os
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
+from Code.Eval import Eval
+from Optimizer.IOptimizer import IOptimizer
 
 def add_text_input(text, x1, y1, x2, y2):
     Label = tk.Label()
@@ -10,7 +12,6 @@ def add_text_input(text, x1, y1, x2, y2):
                     fg="white",
                     bg="black",
                     font="Arial 12")
-    Label.pack()
     Label.place(x=x1, y=y1)
 
     outputvar = tk.StringVar(window)
@@ -20,7 +21,6 @@ def add_text_input(text, x1, y1, x2, y2):
                     width=10,
                     font="Arial 12",
                     textvariable=outputvar)
-    Input.pack()
     Input.place(x=x2, y=y2)
     return outputvar
 
@@ -30,7 +30,6 @@ def add_label(text, x, y, font_size):
                     fg="white",
                     bg="black",
                     font="Arial "+font_size)
-    Label.pack()
     Label.place(x=x, y=y)
     return Label
 
@@ -40,7 +39,6 @@ def add_dropdown(text,x1,y1,x2,y2):
                     fg="white",
                     bg="black",
                     font="Arial 12")
-    Label.pack()
     Label.place(x=x1, y=y1)
 
     dummy = ""
@@ -52,12 +50,11 @@ def add_dropdown(text,x1,y1,x2,y2):
     Dropdown['menu'].delete(0, 'end')
     for i in range(len(file_list)):
         name = file_list[i]
-        if(name!="__pycache__"):
+        if(name!="__pycache__")and(name!="IOptimizer.py"):
             name = name[:name.rfind(".")]
             Dropdown['menu'].add_command(label=name, command=tk._setit(outputvar, name))
 
     Dropdown.configure(font="Arial 12")
-    Dropdown.pack()
     Dropdown.place(x=x2,y=y2)
     return outputvar
 
@@ -67,8 +64,8 @@ def add_button(text, x, y):
                      bg="white",
                      fg="black",
                      font="Arial 14 bold",
+                     activebackground="#FF0000",
                      command=Start)
-    Button.pack()
     Button.place(x=x,y=y)
 
 def add_text_output(label, x1, y1, x2, y2, width, height):
@@ -77,7 +74,6 @@ def add_text_output(label, x1, y1, x2, y2, width, height):
                     fg="white",
                     bg="black",
                     font="Arial 12")
-    Label.pack()
     Label.place(x=x1, y=y1)
 
     Output = tk.Text()
@@ -87,7 +83,6 @@ def add_text_output(label, x1, y1, x2, y2, width, height):
                     height=height,
                     font="Arial 12",
                     state="disabled")
-    Output.pack()
     Output.place(x=x2, y=y2)
     return Output
 
@@ -105,10 +100,13 @@ def Start():
         all_good=False
 
     if(all_good):
-        eval = Eval(h, l/n)
-        opt = IOptimizer(n, -h, h,eval.eval_func, a)
-        node_arr = opt.Optimize()
-        t = eval.eval_func(node_arr)
+        eval = Eval(h, l/(n+1))
+        if(n>0):
+            opt = IOptimizer(n, -h, h,eval.evaluate, a)
+            node_arr = opt.Optimize()
+        else:
+            node_arr = []
+        t = eval.evaluate(node_arr)
         node_str = '\n'.join(map(str, node_arr))
         #Output
         TOutput.configure(state="normal")
@@ -119,6 +117,20 @@ def Start():
         HOutput.delete('1.0',tk.END)
         HOutput.insert(tk.END,node_str)
         HOutput.configure(state="disabled")
+
+        node_arr.insert(0,h)
+        node_arr.append(0)
+        y=node_arr
+        x=[0]
+        for i in range(1,len(node_arr)):
+            x.append((l/(n+1))*i)
+
+        figure = plt.Figure(figsize=(6, 4.5), dpi=100)
+        ax=figure.add_subplot(111)
+        bar = FigureCanvasTkAgg(figure, window)
+        bar.get_tk_widget().place(x=435, y=50)
+        ax.plot(x,y)
+        ax.grid("-")
     else:
         #Error
         TOutput.configure(state="normal")
@@ -151,12 +163,12 @@ StartButton = add_button("START", 960, 540)
 
 ##Setup Outputs
 #Graph
-dummy_data = {'d': [0],
-            'h': [0]}
+dummy_data = {'x': [0],
+            'y': [0]}
 df = pd.DataFrame(dummy_data)
 figure = plt.Figure(figsize=(6, 4.5), dpi=100)
+ax=figure.add_subplot(111)
 bar = FigureCanvasTkAgg(figure, window)
-bar.get_tk_widget().pack()
 bar.get_tk_widget().place(x=435, y=50)
 
 #Text

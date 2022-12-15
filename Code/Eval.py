@@ -1,25 +1,27 @@
+from Code.Segment import Segment
 class Eval: 
-    def __init__(self, init_h, seg_length):
-        self.__init_h = init_h
-        self.__seg_length = seg_length
+    def __init__(self, initial_height, segment_length):
+        self.__initial_height = initial_height
+        self.__segment_length = segment_length
 
-    def eval_func(self, node_arr):
-        node_arr.append(0)
-        t = 0
-        h = self.__init_h
-        l = self.__seg_length
-        v_curr = 0
-        for i in range(len(node_arr)):
-            s = Segment(h-node_arr[i], l, v_curr)
-            h = node_arr[i]
-            t_seg = s.CalcT()
-            if(t_seg!=-1):
-                v_curr = s.CalcVEnd()
-                t += t_seg
+    def evaluate(self, nodes):
+        nodes.append(0)  #Endppunkt der Kurve hinzufügen
+        total_time = 0
+        height = self.__initial_height
+        length = self.__segment_length
+        current_velocity = 0
+        for i in range(len(nodes)):
+            segment = Segment(height-nodes[i], length, current_velocity)
+            height = nodes[i]
+            segment_time = segment.calc_time()
+            if(segment_time!=-1):
+                current_velocity = segment.calc_end_velocity()
+                total_time += segment_time
             else:
                 break
-        node_arr.pop()
-        if(t_seg==-1):
+        nodes.pop() #Endpunkt wieder gelöscht
+        if(segment_time==-1):
+            #Fehlerfall
             return -1
         else:
-            return t
+            return total_time
