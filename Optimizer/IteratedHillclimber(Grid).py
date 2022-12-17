@@ -1,4 +1,5 @@
 import numpy
+from .ConsoleProgressBar import progress_bar
 
 class IteratedHillblimber:
 	def __init__(self, dimension, lower_bound, upper_bound, eval_function):
@@ -33,7 +34,11 @@ class IteratedHillblimber:
 		current_vector = numpy.zeros(self.__dimension)+self.__lower_bound
 		current_grid_vector = numpy.zeros(self.__dimension)+self.__lower_bound
 		current_grid_vector[0] -=self.__grid_size
-		for i in range((grid_steps+1)**self.__dimension):
+		total_steps = (grid_steps+1)**self.__dimension
+		for current_try in range(total_steps):
+			if (current_try % int(total_steps / 100)) == 0:
+				# For each percent update progress bar
+				progress_bar("Iterated Hillclimber (Grid)", current_try, total_steps)
 			found_highest_index = False
 			current_index = 0
 			while found_highest_index == False:

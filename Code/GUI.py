@@ -50,7 +50,7 @@ def add_dropdown(text,x1,y1,x2,y2):
     Dropdown['menu'].delete(0, 'end')
     for i in range(len(file_list)):
         name = file_list[i]
-        if(name!="__pycache__")and(name!="IOptimizer.py"):
+        if(name!="__pycache__")and(name!="IOptimizer.py")and(name!="ConsoleProgressBar.py"):
             name = name[:name.rfind(".")]
             Dropdown['menu'].add_command(label=name, command=tk._setit(outputvar, name))
 

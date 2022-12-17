@@ -1,4 +1,5 @@
 import random
+from .ConsoleProgressBar import progress_bar
 
 class RandomSearch:
 	def __init__(self, dimension, lower_bound, upper_bound, eval_function):
@@ -14,7 +15,10 @@ class RandomSearch:
 		optimal_vector = [None] * self.__dimension		#Vektor des gefundenen Minimums
 		current_vector = [None] * self.__dimension		#Aktueller Vektor
 
-		for t in range(self.__num_tries):
+		for current_try in range(self.__num_tries):
+			if (current_try % int(self.__num_tries / 100)) == 0:
+				#For each percent update progress bar 
+				progress_bar("GridSearch", current_try, self.__num_tries)
 			for d in range(self.__dimension):
 				current_vector[d] = random.uniform(self.__lower_bound, self.__upper_bound)
 

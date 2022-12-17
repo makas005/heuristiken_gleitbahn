@@ -1,4 +1,5 @@
 import numpy
+from .ConsoleProgressBar import progress_bar
 
 class IteratedHillblimber:
 	def __init__(self, dimension, lower_bound, upper_bound, eval_function):
@@ -28,6 +29,9 @@ class IteratedHillblimber:
 		best_vector = numpy.random.uniform(self.__lower_bound, self.__upper_bound, self.__dimension)	#Vektor des gefundenen Minimums
 		best_eval = self.__eval_function(best_vector.tolist())	#Wert des gefundenen Minimums
 		for current_try in range(self.__max_tries):
+			if (current_try % int(self.__max_tries / 100)) == 0:
+				# For each percent update progress bar
+				progress_bar("Iterated Hillclimber", current_try, self.__max_tries)
 			current_vector = numpy.random.uniform(self.__lower_bound, self.__upper_bound, self.__dimension)	#Aktuelle Vektor
 			current_eval = self.__eval_function(current_vector.tolist())	#Aktueller Wert
 			while True:

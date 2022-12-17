@@ -1,4 +1,5 @@
 import numpy
+from .ConsoleProgressBar import progress_bar
 
 class IteratedHillblimber:
 	def __init__(self, dimension, lower_bound, upper_bound, eval_function):
@@ -17,8 +18,11 @@ class IteratedHillblimber:
 		best_eval = self.__eval_function(best_vector.tolist())	#Gefundenes Minimum
 		current_vector[0] -=self.__grid_size
 
-
-		for i in range((grid_steps+1)**self.__dimension):
+		total_steps = (grid_steps+1)**self.__dimension
+		for i in range(total_steps):
+			if (i % int(total_steps / 100)) == 0:
+				#For each percent update progress bar 
+				progress_bar("GridSearch", i, total_steps)
 			found_highest_index = False
 			current_index = 0
 			while found_highest_index == False:
